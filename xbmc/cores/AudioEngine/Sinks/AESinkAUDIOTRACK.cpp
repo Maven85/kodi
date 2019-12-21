@@ -120,6 +120,14 @@ static CAEChannelInfo AUDIOTRACKChannelMaskToAEChannelMap(int atMask)
     mask <<= 1;
   }
 
+  // Android internally uses a Legacy wide layout for AE does it the other way round
+  if (atMask & (CJNIAudioFormat::CHANNEL_OUT_BACK_LEFT | CJNIAudioFormat::CHANNEL_OUT_BACK_RIGHT |
+                CJNIAudioFormat::CHANNEL_OUT_SIDE_LEFT | CJNIAudioFormat::CHANNEL_OUT_SIDE_RIGHT))
+  {
+    info.SwapChannel(AE_CH_BL, AE_CH_SL);
+    info.SwapChannel(AE_CH_BR, AE_CH_SR);
+  }
+
   return info;
 }
 
@@ -133,8 +141,9 @@ static int AEChannelMapToAUDIOTRACKChannelMask(CAEChannelInfo info)
   // 5.1(side)      FL+FR+FC+LFE+SL+SR
   // According to CEA-861-D only RR and RL are defined
   // Therefore we let Android decide about the 5.1 mapping
-  // For 8 channel layouts including one LFE channel
-  // we leave the same decision to Android
+  // For layouts with SL, SR and BL, BR set - we need to
+  // make sure that AE takes SL, SR first - we need
+  // to swap that when remapping
   if (info.Count() == 6 && info.HasChannel(AE_CH_LFE))
     return CJNIAudioFormat::CHANNEL_OUT_5POINT1;
 

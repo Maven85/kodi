@@ -331,6 +331,26 @@ void CAEChannelInfo::ReplaceChannel(const enum AEChannel from, const enum AEChan
   }
 }
 
+void CAEChannelInfo::SwapChannel(const enum AEChannel a, const enum AEChannel b)
+{
+  int inda = -1;
+  int indb = -1;
+  for (unsigned int i = 0; i < m_channelCount; i++)
+  {
+    if (m_channels[i] == a)
+      inda = i;
+    else if (m_channels[i] == b)
+      indb = i;
+  }
+
+  if (inda != -1 && indb != -1)
+  {
+    AEChannel temp = m_channels[inda];
+    m_channels[inda] = m_channels[indb];
+    m_channels[indb] = temp;
+  }
+}
+
 int CAEChannelInfo::BestMatch(const std::vector<CAEChannelInfo>& dsts, int* score) const
 {
   CAEChannelInfo availableDstChannels;

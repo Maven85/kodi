@@ -17,6 +17,7 @@ set(SOURCES android_main.cpp
             JNIXBMCNsdManagerResolveListener.cpp
             JNIXBMCJsonHandler.cpp
             JNIXBMCFile.cpp
+            JNIXBMCTextureCache.cpp
             JNIXBMCURIUtils.cpp
             JNIXBMCDisplayManagerDisplayListener.cpp
             ${NDKROOT}/sources/android/native_app_glue/android_native_app_glue.c
@@ -43,6 +44,7 @@ set(HEADERS AndroidExtra.h
             JNIXBMCNsdManagerResolveListener.h
             JNIXBMCJsonHandler.h
             JNIXBMCFile.h
+            JNIXBMCTextureCache.h
             JNIXBMCURIUtils.h
             JNIXBMCDisplayManagerDisplayListener.h
             XBMCApp.h)

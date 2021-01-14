@@ -1,4 +1,4 @@
 LIBNAME=ffmpeg
-BASE_URL=https://github.com/xbmc/FFmpeg
-VERSION=4.4-N-Alpha1
+BASE_URL=https://github.com/quietvoid/FFmpeg
+VERSION=4.4-MatroskaDovi
 ARCHIVE=$(LIBNAME)-$(VERSION).tar.gz

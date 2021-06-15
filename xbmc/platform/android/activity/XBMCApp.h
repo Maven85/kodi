@@ -102,6 +102,9 @@ public:
   virtual void onAudioFocusChange(int focusChange);
   void doFrame(int64_t frameTimeNanos) override;
   void onVisibleBehindCanceled() override;
+  void onMultiWindowModeChanged(bool isInMultiWindowMode) override;
+  void onPictureInPictureModeChanged(bool isInPictureInPictureMode) override;
+  void onUserLeaveHint() override;
 
   // implementation of CJNIInputManagerInputDeviceListener
   void onInputDeviceAdded(int deviceId) override;
@@ -193,6 +196,9 @@ public:
   // Application slow ping
   void ProcessSlow();
 
+  //PIP
+  static void RequestPictureInPictureMode();
+
   static bool WaitVSync(unsigned int milliSeconds);
   static int64_t GetNextFrameTime();
   static float GetFrameLatencyMs();
@@ -235,6 +241,7 @@ private:
   static bool m_hdmiPlugged;
   static bool m_hdmiReportedState;
   static bool m_hdmiSource;
+  static bool m_hasPIP;
   static IInputDeviceCallbacks* m_inputDeviceCallbacks;
   static IInputDeviceEventHandler* m_inputDeviceEventHandler;
   static bool m_hasReqVisible;

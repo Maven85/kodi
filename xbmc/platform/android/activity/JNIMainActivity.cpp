@@ -49,6 +49,9 @@ void CJNIMainActivity::RegisterNatives(JNIEnv* env)
         {"_callNative", "(JJ)V", reinterpret_cast<void*>(&CJNIMainActivity::_callNative)},
         {"_onVisibleBehindCanceled", "()V",
          reinterpret_cast<void*>(&CJNIMainActivity::_onVisibleBehindCanceled)},
+        {"_onMultiWindowModeChanged", "(Z)V", reinterpret_cast<void*>(&CJNIMainActivity::_onMultiWindowModeChanged)},
+        {"_onPictureInPictureModeChanged", "(Z)V", reinterpret_cast<void*>(&CJNIMainActivity::_onPictureInPictureModeChanged)},
+        {"_onUserLeaveHint", "()V", reinterpret_cast<void*>(&CJNIMainActivity::_onUserLeaveHint)},
     };
     env->RegisterNatives(cMain, methods, sizeof(methods) / sizeof(methods[0]));
   }
@@ -105,6 +108,30 @@ void CJNIMainActivity::_onVisibleBehindCanceled(JNIEnv* env, jobject context)
   (void)context;
   if (m_appInstance)
     m_appInstance->onVisibleBehindCanceled();
+}
+
+void CJNIMainActivity::_onMultiWindowModeChanged(JNIEnv* env, jobject context, jboolean isInMultiWindowMode)
+{
+  (void)env;
+  (void)context;
+  if (m_appInstance)
+    m_appInstance->onMultiWindowModeChanged(isInMultiWindowMode);
+}
+
+void CJNIMainActivity::_onPictureInPictureModeChanged(JNIEnv* env, jobject context, jboolean isInPictureInPictureMode)
+{
+  (void)env;
+  (void)context;
+  if (m_appInstance)
+    m_appInstance->onPictureInPictureModeChanged(isInPictureInPictureMode);
+}
+
+void CJNIMainActivity::_onUserLeaveHint(JNIEnv* env, jobject context)
+{
+  (void)env;
+  (void)context;
+  if (m_appInstance)
+    m_appInstance->onUserLeaveHint();
 }
 
 void CJNIMainActivity::runNativeOnUiThread(void (*callback)(void*), void* variant)

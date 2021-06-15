@@ -136,6 +136,7 @@ public:
   static constexpr auto SETTING_VIDEOPLAYER_SUPPORTMVC = "videoplayer.supportmvc";
   static constexpr auto SETTING_VIDEOPLAYER_CONVERTDOVI = "videoplayer.convertdovi";
   static constexpr auto SETTING_VIDEOPLAYER_ALLOWEDHDRFORMATS = "videoplayer.allowedhdrformats";
+  static constexpr auto SETTING_VIDEOPLAYER_USEPIP = "videoplayer.usepip";
   static constexpr auto SETTING_MYVIDEOS_SELECTACTION = "myvideos.selectaction";
   static constexpr auto SETTING_MYVIDEOS_SELECTDEFAULTVERSION = "myvideos.selectdefaultversion";
   static constexpr auto SETTING_MYVIDEOS_PLAYACTION = "myvideos.playaction";

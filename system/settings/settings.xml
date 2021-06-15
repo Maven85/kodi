@@ -101,6 +101,14 @@
           </constraints>
           <control type="list" format="string" />
         </setting>
+    	<setting id="videoplayer.usepip" type="boolean" label="31170">
+          <level>0</level>
+          <default>true</default>
+          <updates>
+            <update type="change" />
+          </updates>
+          <control type="toggle" />
+        </setting>
       </group>
       <group id="3" label="14231">
         <setting id="videoplayer.rendermethod" type="integer" label="13415" help="36153">

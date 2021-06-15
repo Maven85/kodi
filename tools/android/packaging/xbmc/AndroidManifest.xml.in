@@ -100,7 +100,9 @@
             android:launchMode="singleInstance"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true">
 
             <!-- Tell NativeActivity the name of or .so -->
             <meta-data

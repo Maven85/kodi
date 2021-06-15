@@ -434,3 +434,7 @@ msgstr "Laufender Titel..."
 #~ msgctxt "#31018"
 #~ msgid "Player process info"
 #~ msgstr "Player-Informationen"
+
+msgctxt "#31170"
+msgid "Enable \"Picture-In-Picture\"-Mode"
+msgstr "\"Bild-im-Bild\"-Modus aktivieren"

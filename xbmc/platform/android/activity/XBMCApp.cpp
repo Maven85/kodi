@@ -335,35 +335,39 @@ void CXBMCApp::onResume()
 
 void CXBMCApp::onPause()
 {
-  android_printf("%s: ", __PRETTY_FUNCTION__);
-  m_bResumePlayback = false;
-
-  const auto& components = CServiceBroker::GetAppComponents();
-  const auto appPlayer = components.GetComponent<CApplicationPlayer>();
-  if (appPlayer->IsPlaying())
+  if (GetSDKVersion() < 24 ||
+      CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_VIDEOPLAYER_USEPIP) == false)
   {
-    if (appPlayer->HasVideo())
+    android_printf("%s: ", __PRETTY_FUNCTION__);
+    m_bResumePlayback = false;
+
+    const auto& components = CServiceBroker::GetAppComponents();
+    const auto appPlayer = components.GetComponent<CApplicationPlayer>();
+    if (appPlayer->IsPlaying())
     {
-      if (!appPlayer->IsPaused() && !m_hasReqVisible)
+      if (appPlayer->HasVideo())
       {
-        CServiceBroker::GetAppMessenger()->SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
-                                                   static_cast<void*>(new CAction(ACTION_PAUSE)));
-        m_bResumePlayback = true;
+        if (!appPlayer->IsPaused() && !m_hasReqVisible)
+        {
+          CServiceBroker::GetAppMessenger()->SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
+                                                     static_cast<void*>(new CAction(ACTION_PAUSE)));
+          m_bResumePlayback = true;
+        }
       }
+
+      if (m_hasReqVisible)
+      {
+        CGUIComponent* gui = CServiceBroker::GetGUI();
+        if (gui)
+        {
+          gui->GetWindowManager().SwitchToFullScreen(true);
+        }
+      }
+
+      KeepScreenOn(false);
+      m_hasReqVisible = false;
     }
   }
-
-  if (m_hasReqVisible)
-  {
-    CGUIComponent* gui = CServiceBroker::GetGUI();
-    if (gui)
-    {
-      gui->GetWindowManager().SwitchToFullScreen(true);
-    }
-  }
-
-  KeepScreenOn(false);
-  m_hasReqVisible = false;
 }
 
 void CXBMCApp::onStop()
@@ -629,6 +633,16 @@ void CXBMCApp::RequestVisibleBehind(bool requested)
 
   m_hasReqVisible = requestVisibleBehind(requested);
   CLog::Log(LOGDEBUG, "Visible Behind request: {}", m_hasReqVisible ? "true" : "false");
+}
+
+void CXBMCApp::RequestPictureInPictureMode()
+{
+  // PIP and VisbleBehind are exclusive
+  if (m_hasReqVisible)
+    RequestVisibleBehind(false);
+
+  enterPictureInPictureMode();
+  CLog::Log(LOGDEBUG, "Entering PIP mode");
 }
 
 void CXBMCApp::run()
@@ -1517,6 +1531,29 @@ void CXBMCApp::onVisibleBehindCanceled()
     else if (m_playback_state & PLAYBACK_STATE_VIDEO)
       CServiceBroker::GetAppMessenger()->PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1,
                                                  static_cast<void*>(new CAction(ACTION_PAUSE)));
+  }
+}
+
+void CXBMCApp::onMultiWindowModeChanged(bool isInMultiWindowMode)
+{
+  android_printf("%s: %s", __PRETTY_FUNCTION__, isInMultiWindowMode ? "true" : "false");
+}
+
+void CXBMCApp::onPictureInPictureModeChanged(bool isInPictureInPictureMode)
+{
+  android_printf("%s: %s", __PRETTY_FUNCTION__, isInPictureInPictureMode ? "true" : "false");
+  m_hasPIP = isInPictureInPictureMode;
+}
+
+void CXBMCApp::onUserLeaveHint()
+{
+  if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_VIDEOPLAYER_USEPIP))
+  {
+    if ((m_playback_state & PLAYBACK_STATE_PLAYING) && (m_playback_state & PLAYBACK_STATE_VIDEO))
+    {
+      if (GetSDKVersion() >= 24)
+        RequestPictureInPictureMode();
+    }
   }
 }
 

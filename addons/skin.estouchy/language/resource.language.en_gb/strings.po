@@ -491,3 +491,7 @@ msgstr ""
 msgctxt "#31904"
 msgid "Now Playing Title..."
 msgstr ""
+
+msgctxt "#31170"
+msgid "Enable \"Picture-In-Picture\"-Mode"
+msgstr ""

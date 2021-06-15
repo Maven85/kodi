@@ -763,3 +763,7 @@ msgstr "System"
 #~ msgctxt "#31138"
 #~ msgid "Player process info"
 #~ msgstr "Player-Informationen"
+
+msgctxt "#31616"
+msgid "Enable \"Picture-In-Picture\"-Mode"
+msgstr "\"Bild-im-Bild\"-Modus aktivieren"

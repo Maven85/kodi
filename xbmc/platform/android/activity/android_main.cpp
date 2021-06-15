@@ -159,6 +159,9 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)
       {"_doFrame", "(J)V", (void*)&CJNIMainActivity::_doFrame},
       {"_callNative", "(JJ)V", (void*)&CJNIMainActivity::_callNative},
       {"_onVisibleBehindCanceled", "()V", (void*)&CJNIMainActivity::_onVisibleBehindCanceled},
+      {"_onMultiWindowModeChanged", "(Z)V", (void*)&CJNIMainActivity::_onMultiWindowModeChanged},
+      {"_onPictureInPictureModeChanged", "(Z)V", (void*)&CJNIMainActivity::_onPictureInPictureModeChanged},
+      {"_onUserLeaveHint", "()V", (void*)&CJNIMainActivity::_onUserLeaveHint},
     };
     env->RegisterNatives(cMain, methods, sizeof(methods)/sizeof(methods[0]));
   }

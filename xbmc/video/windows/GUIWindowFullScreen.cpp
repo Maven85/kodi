@@ -36,6 +36,8 @@
 #include <algorithm>
 #if defined(TARGET_DARWIN)
 #include "platform/posix/PosixResourceCounter.h"
+#elif defined(TARGET_ANDROID)
+#include "platform/android/activity/XBMCApp.h"
 #endif
 
 using namespace KODI::GUILIB;

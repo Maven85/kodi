@@ -124,6 +124,7 @@ bool CXBMCApp::m_hasFocus = false;
 bool CXBMCApp::m_headsetPlugged = false;
 bool CXBMCApp::m_hdmiPlugged = true;
 bool CXBMCApp::m_hdmiSource = false;
+bool CXBMCApp::m_hasPIP = false;
 IInputDeviceCallbacks* CXBMCApp::m_inputDeviceCallbacks = nullptr;
 IInputDeviceEventHandler* CXBMCApp::m_inputDeviceEventHandler = nullptr;
 bool CXBMCApp::m_hasReqVisible = false;
@@ -267,26 +268,29 @@ void CXBMCApp::onResume()
 
 void CXBMCApp::onPause()
 {
-  android_printf("%s: ", __PRETTY_FUNCTION__);
-  m_bResumePlayback = false;
-
-  if (g_application.GetAppPlayer().IsPlaying())
+  if (CJNIBase::GetSDKVersion() < 24)
   {
-    if (g_application.GetAppPlayer().HasVideo())
+    android_printf("%s: ", __PRETTY_FUNCTION__);
+    m_bResumePlayback = false;
+
+    if (g_application.GetAppPlayer().IsPlaying())
     {
-      if (!g_application.GetAppPlayer().IsPaused() && !m_hasReqVisible)
+      if (g_application.GetAppPlayer().HasVideo())
       {
-        CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
-        m_bResumePlayback = true;
+        if (!g_application.GetAppPlayer().IsPaused() && !m_hasReqVisible)
+        {
+          CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
+          m_bResumePlayback = true;
+        }
       }
     }
+
+    if (m_hasReqVisible)
+      g_application.SwitchToFullScreen(true);
+
+    EnableWakeLock(false);
+    m_hasReqVisible = false;
   }
-
-  if (m_hasReqVisible)
-    g_application.SwitchToFullScreen(true);
-
-  EnableWakeLock(false);
-  m_hasReqVisible = false;
 }
 
 void CXBMCApp::onStop()
@@ -466,6 +470,16 @@ void CXBMCApp::RequestVisibleBehind(bool requested)
 
   m_hasReqVisible = requestVisibleBehind(requested);
   CLog::Log(LOGDEBUG, "Visible Behind request: %s", m_hasReqVisible ? "true" : "false");
+}
+
+void CXBMCApp::RequestPictureInPictureMode()
+{
+  // PIP and VisbleBehind are exclusive
+  if (m_hasReqVisible)
+    RequestVisibleBehind(false);
+
+  enterPictureInPictureMode();
+  CLog::Log(LOGDEBUG, "Entering PIP mode");
 }
 
 bool CXBMCApp::IsHeadsetPlugged()
@@ -1233,6 +1247,26 @@ void CXBMCApp::onVisibleBehindCanceled()
       CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_STOP)));
     else if (m_playback_state & PLAYBACK_STATE_VIDEO)
       CApplicationMessenger::GetInstance().PostMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(ACTION_PAUSE)));
+  }
+}
+
+void CXBMCApp::onMultiWindowModeChanged(bool isInMultiWindowMode)
+{
+  android_printf("%s: %s", __PRETTY_FUNCTION__, isInMultiWindowMode ? "true" : "false");
+}
+
+void CXBMCApp::onPictureInPictureModeChanged(bool isInPictureInPictureMode)
+{
+  android_printf("%s: %s", __PRETTY_FUNCTION__, isInPictureInPictureMode ? "true" : "false");
+  m_hasPIP = isInPictureInPictureMode;
+}
+
+void CXBMCApp::onUserLeaveHint()
+{
+  if ((m_playback_state & PLAYBACK_STATE_PLAYING) && (m_playback_state & PLAYBACK_STATE_VIDEO))
+  {
+    if (CJNIBase::GetSDKVersion() >= 24)
+      RequestPictureInPictureMode();
   }
 }
 

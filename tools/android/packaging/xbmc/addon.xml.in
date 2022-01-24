@@ -1,0 +1,9 @@
+<addon id="@APP_PACKAGE@.@ANDROID_ARCH@" name="Maven's Kodi-Builds für FireTV" version="@JENKINS_BUILD_STRING@" provider-name="Maven">
+	<requires>
+		<import addon="xbmc.python" version="3.0.2"/>
+	</requires>
+	<extension point="android.binary" version="@ANDROID_ARCH@"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de">Omega-Build für FireTV</summary>
+	</extension>
+</addon>

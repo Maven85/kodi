@@ -33,7 +33,8 @@ if(ARCH STREQUAL aarch64 AND patch LESS 999)
 endif()
 unset(patch)
 
-set(package_files strings.xml
+set(package_files addon.xml
+                  strings.xml
                   colors.xml
                   searchable.xml
                   AndroidManifest.xml

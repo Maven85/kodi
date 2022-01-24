@@ -64,6 +64,7 @@ res:
 	cp xbmc/strings.xml xbmc/res/values/
 	cp xbmc/colors.xml xbmc/res/values/
 	cp xbmc/searchable.xml xbmc/res/xml/
+	cp xbmc/addon.xml xbmc/assets/
 
 libs: $(PREFIX)/lib/@APP_NAME_LC@/lib@APP_NAME_LC@.so
 	rm -rf xbmc/lib/$(CPU) xbmc/obj/local/$(CPU)

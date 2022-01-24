@@ -30,7 +30,8 @@ unset(major)
 unset(minor)
 unset(patch)
 
-set(package_files strings.xml
+set(package_files addon.xml
+                  strings.xml
                   colors.xml
                   searchable.xml
                   AndroidManifest.xml

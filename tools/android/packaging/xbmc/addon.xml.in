@@ -1,0 +1,10 @@
+<addon id="@APP_PACKAGE@.@ANDROID_ARCH@" name="Maven's Kodi-Builds für Android" version="@JENKINS_BUILD_STRING@" provider-name="Maven">
+	<requires>
+		<import addon="xbmc.python" version="3.0.3"/>
+	</requires>
+	<extension point="android.binary" version="@ANDROID_ARCH@"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de">Piers-Build</summary>
+		<source>https://github.com/Maven85/kodi/tree/22-android</source>
+	</extension>
+</addon>

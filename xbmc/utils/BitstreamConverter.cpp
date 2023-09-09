@@ -356,6 +356,8 @@ CBitstreamConverter::CBitstreamConverter()
   m_sps_pps_context.sps_pps_data = NULL;
   m_start_decode = true;
   m_convert_dovi = false;
+  m_remove_hdr10plus = false;
+  m_remove_dovi = false;
 }
 
 CBitstreamConverter::~CBitstreamConverter()
@@ -976,7 +978,16 @@ bool CBitstreamConverter::BitstreamConvert(uint8_t* pData, int iSize, uint8_t **
           m_sps_pps_context.idr_sps_pps_seen = 0;
       }
 
-      if (m_convert_dovi)
+      if (m_remove_dovi && (unit_type == HEVC_NAL_UNSPEC62 || unit_type == HEVC_NAL_UNSPEC63))
+          write_buf = false;
+
+      // Skip ITU-T T.35 SMPTE ST 2094-40 SEI prefix NALUs
+      // Note: Only works if SEI has a single message, or if HDR10+ is first message
+      if (m_remove_hdr10plus && unit_type == HEVC_NAL_SEI_PREFIX && buf[0] == 78 && buf[1] == 1 &&
+          buf[2] == 4)
+          write_buf = false;
+
+      if (write_buf && m_convert_dovi)
       {
         if (unit_type == HEVC_NAL_UNSPEC62)
         {

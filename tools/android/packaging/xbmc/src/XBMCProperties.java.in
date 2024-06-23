@@ -31,10 +31,17 @@ public class XBMCProperties
 
   public static void initializeProperties()
   {
-    String propfn = Storage.getPrimaryStorageVolumePath(mContext) + "/xbmc_env.properties";
+    String propfn = Storage.getPrimaryStorageVolumePath(mContext) + "/maven_env.properties";
     Log.i(TAG, "XBMCProperties: Expected at " + propfn);
 
     File fProp = new File(propfn);
+    if (!fProp.exists())
+    {
+      propfn = Storage.getPrimaryStorageVolumePath(mContext) + "/xbmc_env.properties";
+      Log.i(TAG, "XBMCProperties: Expected at " + propfn);
+
+      fProp = new File(propfn);
+    }
     if (fProp.exists())
     {
       Log.i(TAG, "XBMCProperties: Loading " + propfn);

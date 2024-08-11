@@ -20,7 +20,7 @@ public class XBMCProperties
 
   public static void initializeProperties()
   {
-    String propfn = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xbmc_env.properties";
+    String propfn = Environment.getExternalStorageDirectory().getAbsolutePath() + "/maven_env.properties";
     File fProp = new File(propfn);
     if (fProp.exists())
     {

@@ -1,6 +1,6 @@
 LIBNAME=libandroidjni
 VERSION=391d8f07153163b89522b80fe01eb960f00583e5
-BASE_URL=https://github.com/xbmc/libandroidjni/archive
+BASE_URL=https://github.com/Maven85/libandroidjni/archive
 ARCHIVE=$(VERSION).tar.gz
 SHA512=d691a38deb55ada96c59e3bad7ffd1b9cba51a701812a05b6bc19a3cbd42ea37b4711a0ec176d48a6b3c0d01f64e1a2a6fb02cb887a22832940216d7999b3247
 BYPRODUCT=libandroidjni.a

@@ -1450,6 +1450,7 @@ void CXBMCApp::onPictureInPictureModeChanged(bool isInPictureInPictureMode)
 
 void CXBMCApp::onUserLeaveHint()
 {
+  CLog::Log(LOGDEBUG, "CXBMCApp::{}: m_playback_state: {}", __FUNCTION__, m_playback_state);
   if (CServiceBroker::GetSettingsComponent()->GetSettings()->GetBool(CSettings::SETTING_VIDEOPLAYER_USEPIP))
   {
     if ((m_playback_state & PLAYBACK_STATE_PLAYING) && (m_playback_state & PLAYBACK_STATE_VIDEO))
